@@ -1,6 +1,6 @@
 // Setup empty JS object to act as endpoint for all routes
 // Express to run server and routes
-const projectData = {};
+let projectData = {};
 const express = require('express');
 
 // Start up an instance of app
@@ -27,7 +27,7 @@ const port = 5500;
 const server = app.listen(port, listening());
 
 function listening() {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server is running on port ${port}! Party Time!`);
 };
 
 // Initialize all route with a callback function
@@ -36,4 +36,9 @@ app.get('/all', function(req,res){
 });
 
 // Post Route
-app.post('/all', )
+app.post('/all', function(req,res){
+    projectData.temp = req.body.temp;
+    //TODO
+    projectData.date;
+    projectData.userInput;
+});

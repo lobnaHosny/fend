@@ -15,6 +15,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
+//Add cors to allow cross-origin requests
 const cors = require('cors');
 app.use(cors());
 
@@ -22,24 +23,24 @@ app.use(cors());
 app.use(express.static('website'));
 
 // Spin up the server
-// Callback to debug
 const port = 3000;
 const server = app.listen(port, listening());
 
+// Callback to debug
 function listening() {
     console.log(`Server is running on port ${port}! Party Time!`);
 };
 
 // Initialize all route with a callback function
 app.get('/all', function(req,res){
-    //res.send('hey there');
-    res.send(projectData);
+    //send data back to app
+    res.send(projectData); 
 });
 
 // Post Route
 app.post('/all', function(req,res){
+    //save data received from app in endpoint
     projectData.temp = req.body.temp;
     projectData.date = req.body.date;
     projectData.userInput = req.body.feelings;
-    console.log(projectData);
 });

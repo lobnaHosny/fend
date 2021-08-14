@@ -19,5 +19,9 @@ label {
 }
 
 body {
-    background-color:lightcoral;
+    background-color:rgb(253, 175, 221);
+}
+
+h1, body{
+    font-family: 'Raleway', sans-serif;
 }

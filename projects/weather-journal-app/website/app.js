@@ -9,22 +9,24 @@ let newDate = d.getMonth()+1 + '.'+ d.getDate()+'.'+ d.getFullYear();
 //Access the submit button with ID 'generate'
 generateButton = document.getElementById('generate'); 
 
-// //Access feelings textarea with ID 'feelings'
-// feelingText = document.getElementById('feelings');
-
 // Event listener to add function to existing HTML DOM element
 generateButton.addEventListener('click', generateData);
 
+//Event listener function with chained promises
 function generateData (){
+    //get zip number typed in by user 
     zip = document.querySelector('#zip').value;
+
+    //get feelings typed in by user
     feelings = document.querySelector('#feelings').value;
 
+    //get weather data from API 
     getWeather(baseUrl, zip, myApiKey)
+    //then post data to server
     .then(function(weatherData){
-        console.log(weatherData.main.temp);
-        //console.log(feelings);
         postedData = postProjectData('/all', {temp: weatherData.main.temp, date: newDate, feelings: feelings});
     })
+    //then update the user interface
     .then(updateMyUi)
     
 };
@@ -32,18 +34,25 @@ function generateData (){
 
 /* Function to GET Web API Data*/
 async function getWeather(baseUrl, zip, myApiKey ){
+    //create full API link
     const readyUrl = baseUrl + `zip=${zip}&appid=${myApiKey}`;
+
+    //fetch data 
     const fetchData =  await fetch (readyUrl);
+
+    //convert data to JSON 
     const weatherReport = await fetchData.json();
+
     return weatherReport;
 }
 
 
 /* Function to POST data */
 async function postProjectData (myUrl, dataToPost){
+
+    //create POST request to send data to server
     const res = await fetch (myUrl, {
         method: 'POST',
-        credentials: 'same-origin',
         headers: {
       'Content-Type': 'application/json'
         },
@@ -51,6 +60,7 @@ async function postProjectData (myUrl, dataToPost){
     });
 
     try {
+        //convert data to JSON
         const resJson = await res.json();
         return resJson;
     } catch {
@@ -58,33 +68,20 @@ async function postProjectData (myUrl, dataToPost){
     }
 }
 
-/* Function to GET Project Data */
-// async function getProjectData (myUrl){
-//     const rawProjectData = await fetch(myUrl);
-//     try {
-//         const projectData = await rawProjectData.json();
-//         return projectData;
-//     } catch {
-//         console.log('Type of error: ' + error)
-//     }
-    
-// }
-
 
 async function updateMyUi (){
+    //Make a GET request to get the daa from the server
     const rawProjectData = await fetch('/all');
     try {
+        //Convert data to JSON
         const data = await rawProjectData.json();
-        console.log(data);
+
+        //Update relevant UI elements to show the data in the UI to the user
         document.getElementById('date').innerHTML = data.temp;
         document.getElementById('temp').innerHTML = data.date;
         document.getElementById('content').innerHTML = data.userInput;
     } catch {
         console.log('Type of error: ' + error)
     }
-    //console.log(data);
-
-        //const data = await getProjectData ('/all');
-   
 
   }
